@@ -2,6 +2,16 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - tools",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "tools",
+            "args": ""
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - WordCount",
             "request": "launch",
             "cwd": "${workspaceFolder}",

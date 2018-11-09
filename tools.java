@@ -11,7 +11,7 @@ public class tools {
     String happy = br.readLine();
     br.close();
     Collection anagrams = anagram_finder(happy).values();
-    collection_to_array(anagrams);
+    print_anagrams(anagrams);
   }
 
   private static Hashtable anagram_finder(String text) {
@@ -20,7 +20,12 @@ public class tools {
     for(int i = 0; i < words.length; i++) {
       String ordered_word = format_word(words[i]);
       String[] anagramList = anagrams.get(ordered_word);
-      if(anagrams.containsKey(ordered_word) && !Arrays.asList(anagramList).contains(words[i])){
+      boolean isAnagram = anagrams.containsKey(ordered_word);
+      boolean recorded = false;
+      if(isAnagram) recorded = Arrays.asList(anagramList).contains(words[i]);
+
+      if(recorded) continue;
+      if(isAnagram){
         anagramList = push(anagramList, words[i]);
         anagrams.put(ordered_word, anagramList);
       } else {
@@ -31,7 +36,7 @@ public class tools {
     return anagrams;
   }
 
-  private static void collection_to_array(Collection coll){
+  private static void print_anagrams(Collection coll){
     for(int i = 0; i < coll.size(); i++){
       String[] anagrams = (String[]) coll.toArray()[i];
       if(anagrams.length > 1)

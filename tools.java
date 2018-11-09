@@ -15,16 +15,14 @@ public class tools {
   }
 
   private static Hashtable anagram_finder(String text) {
-    text = text.replaceAll("[,.?!]|\"", " ");
-    text = text.toLowerCase();
-    String[] words = text.split("  |[ _]|--");
+    String[] words = get_words(text);
     Hashtable<String, String[]> anagrams = new Hashtable<String, String[]>();
     for(int i = 0; i < words.length; i++) {
-      String word = words[i].replaceAll("[^a-zA-Z]", "");
-      String ordered_word = alphabetise(word);
+      String ordered_word = format_word(words[i]);
       String[] anagramList = anagrams.get(ordered_word);
       if(anagrams.containsKey(ordered_word) && !Arrays.asList(anagramList).contains(words[i])){
-        anagrams.put(ordered_word, push(anagrams.get(ordered_word), words[i]));
+        anagramList = push(anagramList, words[i]);
+        anagrams.put(ordered_word, anagramList);
       } else {
         String[] anagram = {words[i]};
         anagrams.put(ordered_word, anagram);
@@ -34,11 +32,23 @@ public class tools {
   }
 
   private static void collection_to_array(Collection coll){
-    for(Object obj : coll){
-      String[] anagrams = (String[]) obj;
+    for(int i = 0; i < coll.size(); i++){
+      String[] anagrams = (String[]) coll.toArray()[i];
       if(anagrams.length > 1)
         System.out.print(Arrays.toString(anagrams));
     }
+  }
+
+  private static String[] get_words(String text) {
+    text = text.replaceAll("[,.?!]|\"", "");
+    text = text.toLowerCase();
+    String[] words = text.split("  |[ _]|--");
+    return words;
+  }
+
+  private static String format_word(String word) { 
+    word = word.replaceAll("[^a-zA-Z]", "");
+    return alphabetise(word);
   }
 
   private static String alphabetise(String input) {

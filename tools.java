@@ -28,15 +28,13 @@ public class tools {
 
   private static Hashtable anagram_finder(String text) {
     String[] words = get_words(text);
-    System.out.println(words.length);
     Hashtable<String, String[]> anagrams = new Hashtable<String, String[]>();
     for(int i = 0; i < words.length; i++) {
       if(words[i].length() < 2) continue;
       String ordered_word = format_word(words[i]);
       String[] anagramList = anagrams.get(ordered_word);
       boolean isAnagram = anagrams.containsKey(ordered_word);
-      boolean recorded = false; if(isAnagram) recorded = Arrays.asList(anagramList).contains(words[i]);
-      if(recorded) continue;
+      if(isAnagram && inArray(words[i], anagramList)) continue;
       if(isAnagram){
         anagramList = push(anagramList, words[i]);
         anagrams.put(ordered_word, anagramList);
@@ -57,14 +55,14 @@ public class tools {
   }
 
   private static String[] get_words(String text) {
-    text = text.replaceAll("[,.?!:;”“]", "");
+    text = text.replaceAll("(?<= )'|[^a-zA-Z- '_]","");
     text = text.toLowerCase();
     String[] words = text.split("  |[ _]|--");
     return words;
   }
 
   private static String format_word(String word) { 
-    word = word.replaceAll("[^a-zA-Z]", "");
+    word = word.replaceAll("[^a-z]", "");
     return alphabetise(word);
   }
 
@@ -79,5 +77,14 @@ public class tools {
     array = Arrays.copyOf(array, n + 1);
     array[n] = string_to_push;
     return array;
+  }
+
+  private static boolean inArray(String word, String[] array) {
+    word = word.replaceAll("[^a-z]", "");
+    for(String element : array) {
+      String word_element = element.replaceAll("[^a-z]", "");
+      if(word_element.equals(word)) return true;
+    }
+    return false;
   }
 }

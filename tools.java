@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.ArrayList;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
@@ -7,21 +6,22 @@ import java.util.Hashtable;
 import java.util.Scanner;
 
 public class tools {
+  private static String not_letters = "[^a-zA-Z\u00C0-\u017F]";
+  private static String not_word_chars = "(?<= )'|[^a-zA-Z\u00C0-\u017F '-]";
   public static void main(String[] args) throws IOException{
     try {
-      URL url = new URL("http://www.gutenberg.org/files/1342/1342-0.txt");
+      URL url = new URL("http://www.gutenberg.org/files/58241/58241-0.txt");
       Scanner s = new Scanner(url.openStream());
       String text = "";
       while(s.hasNext()) {
         text += s.nextLine() + " ";
       }
       s.close();
+      //text = "e-mail maile listen Silent";
       Collection anagrams = anagram_finder(text).values();
       print_anagrams(anagrams);
     }
     catch(IOException ex) {
-      // there was some connection problem, or the file did not exist on the server,
-      // or URL was not in the right format.
       ex.printStackTrace();
     }
   }
@@ -55,14 +55,14 @@ public class tools {
   }
 
   private static String[] get_words(String text) {
-    text = text.replaceAll("(?<= )'|[^a-zA-Z- '_]","");
     text = text.toLowerCase();
-    String[] words = text.split("  |[ _]|--");
+    text = text.replaceAll(not_word_chars,"");
+    String[] words = text.split(" +|_|--");
     return words;
   }
 
   private static String format_word(String word) { 
-    word = word.replaceAll("[^a-z]", "");
+    word = word.replaceAll(not_letters, "");
     return alphabetise(word);
   }
 
@@ -80,9 +80,9 @@ public class tools {
   }
 
   private static boolean inArray(String word, String[] array) {
-    word = word.replaceAll("[^a-z]", "");
+    word = word.replaceAll(not_letters, "");
     for(String element : array) {
-      String word_element = element.replaceAll("[^a-z]", "");
+      String word_element = element.replaceAll(not_letters, "");
       if(word_element.equals(word)) return true;
     }
     return false;

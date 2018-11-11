@@ -1,29 +1,41 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Scanner;
 
 public class tools {
   public static void main(String[] args) throws IOException{
-    File file = new File("happy.txt");
-    BufferedReader br = new BufferedReader(new FileReader(file));
-    String happy = br.readLine();
-    br.close();
-    Collection anagrams = anagram_finder(happy).values();
-    print_anagrams(anagrams);
+    try {
+      URL url = new URL("http://www.gutenberg.org/files/1342/1342-0.txt");
+      Scanner s = new Scanner(url.openStream());
+      String text = "";
+      while(s.hasNext()) {
+        text += s.nextLine() + " ";
+      }
+      s.close();
+      Collection anagrams = anagram_finder(text).values();
+      print_anagrams(anagrams);
+    }
+    catch(IOException ex) {
+      // there was some connection problem, or the file did not exist on the server,
+      // or URL was not in the right format.
+      ex.printStackTrace();
+    }
   }
 
   private static Hashtable anagram_finder(String text) {
     String[] words = get_words(text);
+    System.out.println(words.length);
     Hashtable<String, String[]> anagrams = new Hashtable<String, String[]>();
     for(int i = 0; i < words.length; i++) {
+      if(words[i].length() < 2) continue;
       String ordered_word = format_word(words[i]);
       String[] anagramList = anagrams.get(ordered_word);
       boolean isAnagram = anagrams.containsKey(ordered_word);
-      boolean recorded = false;
-      if(isAnagram) recorded = Arrays.asList(anagramList).contains(words[i]);
-
+      boolean recorded = false; if(isAnagram) recorded = Arrays.asList(anagramList).contains(words[i]);
       if(recorded) continue;
       if(isAnagram){
         anagramList = push(anagramList, words[i]);
@@ -45,7 +57,7 @@ public class tools {
   }
 
   private static String[] get_words(String text) {
-    text = text.replaceAll("[,.?!]|\"", "");
+    text = text.replaceAll("[,.?!:;”“]", "");
     text = text.toLowerCase();
     String[] words = text.split("  |[ _]|--");
     return words;

@@ -2,6 +2,26 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - Tools",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "Tools",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - AnagramFinder",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "AnagramFinder",
+            "args": ""
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - tools",
             "request": "launch",
             "cwd": "${workspaceFolder}",

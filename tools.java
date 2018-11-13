@@ -5,12 +5,12 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Scanner;
 
-public class tools {
+public class Tools {
   private static String not_letters = "[^a-zA-Z\u00C0-\u017F]";
   private static String not_word_chars = "(?<= )'|[^a-zA-Z\u00C0-\u017F '-]";
   public static void main(String[] args) throws IOException{
     try {
-      URL url = new URL("http://www.gutenberg.org/files/58241/58241-0.txt");
+      URL url = new URL("http://www.gutenberg.org/cache/epub/10/pg10.txt");
       Scanner s = new Scanner(url.openStream());
       String text = "";
       while(s.hasNext()) {
@@ -29,12 +29,14 @@ public class tools {
   private static Hashtable anagram_finder(String text) {
     String[] words = get_words(text);
     Hashtable<String, String[]> anagrams = new Hashtable<String, String[]>();
+
     for(int i = 0; i < words.length; i++) {
       if(words[i].length() < 2) continue;
       String ordered_word = format_word(words[i]);
       String[] anagramList = anagrams.get(ordered_word);
       boolean isAnagram = anagrams.containsKey(ordered_word);
       if(isAnagram && inArray(words[i], anagramList)) continue;
+
       if(isAnagram){
         anagramList = push(anagramList, words[i]);
         anagrams.put(ordered_word, anagramList);
@@ -47,17 +49,21 @@ public class tools {
   }
 
   private static void print_anagrams(Collection coll){
+    int count = 0;
     for(int i = 0; i < coll.size(); i++){
       String[] anagrams = (String[]) coll.toArray()[i];
-      if(anagrams.length > 1)
-        System.out.print(Arrays.toString(anagrams));
+
+      if(anagrams.length > 1) {
+        count++;
+        System.out.println(Arrays.toString(anagrams));}
     }
+    System.out.print("Anagrams: " + count);
   }
 
   private static String[] get_words(String text) {
     text = text.toLowerCase();
     text = text.replaceAll(not_word_chars,"");
-    String[] words = text.split(" +|_|--");
+    String[] words = text.split(" +|--");
     return words;
   }
 

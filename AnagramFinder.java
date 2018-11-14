@@ -2,8 +2,6 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.ArrayWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -17,16 +15,16 @@ public class AnagramFinder {
 	private static String not_letters = "[^a-zA-Z\u00C0-\u017F]";
   private static String not_word_chars = "(?<= )'|[^a-zA-Z\u00C0-\u017F '-]";
 	public static void main(String[] args) throws Exception {
-		/*Configuration conf = new Configuration();
+		Configuration conf = new Configuration();
 		Job job = Job.getInstance(conf, "word count");
 		job.setJarByClass(WordCount.class);
-		job.setMapperClass(WCMapper.class);
-		job.setReducerClass(WCReducer.class);
+		job.setMapperClass(AMapper.class);
+		job.setReducerClass(AReducer.class);
 		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(IntWritable.class);
+		job.setOutputValueClass(String[].class);
 		FileInputFormat.addInputPath(job, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
-		System.exit(job.waitForCompletion(true) ? 0 : 1);*/
+		System.exit(job.waitForCompletion(true) ? 0 : 1);
 		System.out.println(Arrays.toString(get_words("This is a sentence listen, take a break............... from the chicken in the don't e-mail. Change the course--taken_list?")));
 	}
 
@@ -34,7 +32,6 @@ public class AnagramFinder {
 		extends Mapper<Object, Text, String>{
 
 		private Text formated_word = new Text();
-		private static ArrayWritable anagrams = new ArrayWritable();
 
 		public void map(Object key, Text value, Context context)
 		 throws IOException, InterruptedException {
@@ -48,7 +45,7 @@ public class AnagramFinder {
 
 	public static class AReducer
 		extends Reducer<Text,Text,IntWritable> {
-						
+
 		public void reduce(Text key, Iterable<String> values, Context context)
 		 throws IOException, InterruptedException {
 			String[] anagrams = {};

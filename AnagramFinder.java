@@ -21,7 +21,7 @@ public class AnagramFinder {
 
 		Configuration conf = new Configuration();
 		Job job = Job.getInstance(conf, "word count");
-		job.setJarByClass(WordCount.class);
+		job.setJarByClass(AnagramFinder.class);
 		job.setMapperClass(AMapper.class);
 		job.setReducerClass(AReducer.class);
 		job.setOutputKeyClass(Text.class);

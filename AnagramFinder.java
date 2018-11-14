@@ -15,12 +15,10 @@ public class AnagramFinder {
 	private static String not_letters = "[^a-zA-Z\u00C0-\u017F]";
   private static String not_word_chars = "(?<= )'|[^a-zA-Z\u00C0-\u017F '-]";
 	public static void main(String[] args) throws Exception {
-		String[] test = {"this", "is", "a", "test"};
-		System.out.println(Arrays.toString(test));
-		System.out.println(Arrays.toString(get_words("This is a sentence listen, take a break............... from the chicken in the don't e-mail. Change the course--taken_list?")));
+		System.out.println(Arrays.toString(get_words("This is a test my dudes")));
 
 		Configuration conf = new Configuration();
-		Job job = Job.getInstance(conf, "word count");
+		Job job = Job.getInstance(conf, "anagram finder");
 		job.setJarByClass(AnagramFinder.class);
 		job.setMapperClass(AMapper.class);
 		job.setReducerClass(AReducer.class);

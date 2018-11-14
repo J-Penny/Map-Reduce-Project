@@ -14,6 +14,8 @@ import java.util.Hashtable;
 import java.util.Arrays;
 
 public class AnagramFinder {
+	private static String not_letters = "[^a-zA-Z\u00C0-\u017F]";
+  private static String not_word_chars = "(?<= )'|[^a-zA-Z\u00C0-\u017F '-]";
 	public static void main(String[] args) throws Exception {
 		/*Configuration conf = new Configuration();
 		Job job = Job.getInstance(conf, "word count");
@@ -25,11 +27,11 @@ public class AnagramFinder {
 		FileInputFormat.addInputPath(job, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
 		System.exit(job.waitForCompletion(true) ? 0 : 1);*/
-		System.out.println(Arrays.toString(Tools.get_words("This is a sentence listen, take a break............... from the chicken in the don't e-mail. Change the course--taken_list?")));
+		System.out.println(Arrays.toString(get_words("This is a sentence listen, take a break............... from the chicken in the don't e-mail. Change the course--taken_list?")));
 	}
 
 	public static class AMapper
-	extends Mapper<Object, Text, String>{
+		extends Mapper<Object, Text, String>{
 
 		private Text formated_word = new Text();
 		private static ArrayWritable anagrams = new ArrayWritable();
@@ -46,6 +48,7 @@ public class AnagramFinder {
 
 	public static class AReducer
 		extends Reducer<Text,IntWritable,Text,IntWritable> {
+
 		private IntWritable result = new IntWritable();
 			
 		public void reduce(Text key, Iterable<String> values, Context context)
@@ -56,7 +59,7 @@ public class AnagramFinder {
 
 				anagrams = push(anagrams, val);
 			}
-			
+
 			if(anagrams.length > 1) {
 				result.set(anagrams);
 				context.write(key, result);

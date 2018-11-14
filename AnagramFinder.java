@@ -15,6 +15,10 @@ public class AnagramFinder {
 	private static String not_letters = "[^a-zA-Z\u00C0-\u017F]";
   private static String not_word_chars = "(?<= )'|[^a-zA-Z\u00C0-\u017F '-]";
 	public static void main(String[] args) throws Exception {
+		String[] test = {"this", "is", "a", "test"};
+		System.out.println(Arrays.toString(test));
+		System.out.println(Arrays.toString(get_words("This is a sentence listen, take a break............... from the chicken in the don't e-mail. Change the course--taken_list?")));
+		
 		Configuration conf = new Configuration();
 		Job job = Job.getInstance(conf, "word count");
 		job.setJarByClass(WordCount.class);
@@ -25,18 +29,17 @@ public class AnagramFinder {
 		FileInputFormat.addInputPath(job, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
 		System.exit(job.waitForCompletion(true) ? 0 : 1);
-		System.out.println(Arrays.toString(get_words("This is a sentence listen, take a break............... from the chicken in the don't e-mail. Change the course--taken_list?")));
 	}
 
 	public static class AMapper
-		extends Mapper<Object, Text, Text, Text>{
+		extends Mapper<Object, Text, String, String>{
 
 		private Text formated_word = new Text();
 
 		public void map(Object key, Text value, Context context)
 		 throws IOException, InterruptedException {
-			Text[] words = get_words(value.toString());
-			for(Text word : words) {
+			String[] words = get_words(value.toString());
+			for(String word : words) {
 				formated_word.set(format_word(word));
 				context.write(formated_word, word);
 			}
@@ -44,7 +47,7 @@ public class AnagramFinder {
 	}
 
 	public static class AReducer
-		extends Reducer<Text, Text[], Text, Text[]> {
+		extends Reducer<String, String[], String, String[]> {
 
 		public void reduce(Text key, Iterable<String> values, Context context)
 		 throws IOException, InterruptedException {

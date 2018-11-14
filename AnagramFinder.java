@@ -29,14 +29,14 @@ public class AnagramFinder {
 	}
 
 	public static class AMapper
-		extends Mapper<Object, Text, String>{
+		extends Mapper<Object, Text, Text, Text>{
 
 		private Text formated_word = new Text();
 
 		public void map(Object key, Text value, Context context)
 		 throws IOException, InterruptedException {
-			String[] words = get_words(value.toString());
-			for(String word : words) {
+			Text[] words = get_words(value.toString());
+			for(Text word : words) {
 				formated_word.set(format_word(word));
 				context.write(formated_word, word);
 			}
@@ -44,7 +44,7 @@ public class AnagramFinder {
 	}
 
 	public static class AReducer
-		extends Reducer<Text,Text,IntWritable> {
+		extends Reducer<Text, Text[], Text, Text[]> {
 
 		public void reduce(Text key, Iterable<String> values, Context context)
 		 throws IOException, InterruptedException {

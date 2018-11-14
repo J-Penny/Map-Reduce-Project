@@ -47,10 +47,8 @@ public class AnagramFinder {
 	}
 
 	public static class AReducer
-		extends Reducer<Text,IntWritable,Text,IntWritable> {
-
-		private IntWritable result = new IntWritable();
-			
+		extends Reducer<Text,Text,IntWritable> {
+						
 		public void reduce(Text key, Iterable<String> values, Context context)
 		 throws IOException, InterruptedException {
 			String[] anagrams = {};
@@ -61,8 +59,7 @@ public class AnagramFinder {
 			}
 
 			if(anagrams.length > 1) {
-				result.set(anagrams);
-				context.write(key, result);
+				context.write(key, anagrams);
 			}
 		}
 	}

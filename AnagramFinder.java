@@ -18,7 +18,7 @@ public class AnagramFinder {
 		String[] test = {"this", "is", "a", "test"};
 		System.out.println(Arrays.toString(test));
 		System.out.println(Arrays.toString(get_words("This is a sentence listen, take a break............... from the chicken in the don't e-mail. Change the course--taken_list?")));
-		
+
 		Configuration conf = new Configuration();
 		Job job = Job.getInstance(conf, "word count");
 		job.setJarByClass(WordCount.class);
@@ -32,7 +32,7 @@ public class AnagramFinder {
 	}
 
 	public static class AMapper
-		extends Mapper<Object, Text, String, String>{
+		extends Mapper<Object, Text, Text, String>{
 
 		private Text formated_word = new Text();
 
@@ -47,7 +47,7 @@ public class AnagramFinder {
 	}
 
 	public static class AReducer
-		extends Reducer<String, String[], String, String[]> {
+		extends Reducer<Text, String[], Text, String[]> {
 
 		public void reduce(Text key, Iterable<String> values, Context context)
 		 throws IOException, InterruptedException {

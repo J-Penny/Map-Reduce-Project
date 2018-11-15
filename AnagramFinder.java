@@ -43,7 +43,7 @@ public class AnagramFinder {
 	}
 
 	public static class AReducer extends Reducer<Text, ArrayWritable, Text, ArrayWritable> {
-		private ArrayWritable result = new ArrayWritable();
+		private TextArrayWritable result;
 		
 		public void reduce(Text key, Iterable<Text> values, Context context)
 		 throws IOException, InterruptedException {
@@ -53,11 +53,26 @@ public class AnagramFinder {
 				anagrams = push(anagrams, val);
 			}
 			if(anagrams.length > 1) {
-				result.set(anagrams);
+				result = anagrams;
 				context.write(key, result);
 			}
 		}
 	}
+
+	public static class TextArrayWritable extends ArrayWritable {
+		public TextArrayWritable() {
+				super(Text.class);
+		}
+
+		public TextArrayWritable(String[] strings) {
+				super(Text.class);
+				Text[] texts = new Text[strings.length];
+				for (int i = 0; i < strings.length; i++) {
+						texts[i] = new Text(strings[i]);
+				}
+				set(texts);
+		}
+}
 
   private static String[] get_words(String text) {
     text = text.toLowerCase();

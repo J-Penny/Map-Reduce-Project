@@ -10,16 +10,16 @@ public class Tools {
   private static String not_word_chars = "(?<= )'|[^a-zA-Z\u00C0-\u017F '-]";
   public static void main(String[] args) throws IOException{
     try {
-      URL url = new URL("http://www.gutenberg.org/cache/epub/10/pg10.txt");
+      URL url = new URL("http://www.gutenberg.org/files/46/46-0.txt");
       Scanner s = new Scanner(url.openStream());
       String text = "";
       while(s.hasNext()) {
         text += s.nextLine() + " ";
       }
       s.close();
-      //text = "e-mail maile listen Silent";
       Collection anagrams = anagram_finder(text).values();
       print_anagrams(anagrams);
+      System.out.println("Words: " + get_words(text).length);
     }
     catch(IOException ex) {
       ex.printStackTrace();
@@ -57,7 +57,7 @@ public class Tools {
         count++;
         System.out.println(Arrays.toString(anagrams));}
     }
-    System.out.print("Anagrams: " + count);
+    System.out.println("Anagrams: " + count);
   }
 
   private static String[] get_words(String text) {

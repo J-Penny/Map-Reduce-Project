@@ -55,10 +55,8 @@ public class AnagramFinder {
 				anagrams = push(anagrams, val.toString());
 			}
 
-			if(anagrams.length > 1) {
-				result = new TextArrayWritable(anagrams);
-				context.write(key, result);
-			}
+			result = new TextArrayWritable(anagrams);
+			context.write(key, result);
 		}
 	}
 

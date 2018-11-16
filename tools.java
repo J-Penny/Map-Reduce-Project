@@ -9,7 +9,7 @@ public class Tools {
   private static String not_letters = "[^a-zA-Z\u00C0-\u017F]";
   private static String not_word_chars = "(?<= )'|[^a-zA-Z\u00C0-\u017F '-]";
   public static void main(String[] args) throws IOException{
-    try {
+    /*try {
       URL url = new URL("http://www.gutenberg.org/files/46/46-0.txt");
       Scanner s = new Scanner(url.openStream());
       String text = "";
@@ -23,6 +23,10 @@ public class Tools {
     }
     catch(IOException ex) {
       ex.printStackTrace();
+    }*/
+    String[] arr = new String[0];
+    for(String words : arr) {
+      System.out.print(words);
     }
   }
 

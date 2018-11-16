@@ -36,6 +36,7 @@ public class AnagramFinder {
 			String[] words = get_words(value.toString());
 
 			for(String word : words) {
+				if(word == null) continue;
 				formated_word.set(new Text(format_word(word)));
 				full_word.set(new Text(word));
 				context.write(formated_word, full_word);
@@ -49,12 +50,12 @@ public class AnagramFinder {
 		public void reduce(Text key, Iterable<Text> values, Context context)
 		 throws IOException, InterruptedException {
 			String[] anagrams = new String[0];
-			Iterator<Text> words = values.iterator();
 
-			while(words.hasNext()) {
-				if(inArray(words.next().toString(), anagrams)) continue;
-				anagrams = push(anagrams, words.next().toString());
+			for(Text val : values) {
+				if(val == null || inArray(val.toString(), anagrams)) continue;
+				anagrams = push(anagrams, val.toString());
 			}
+
 			if(anagrams.length > 1) {
 				result = new TextArrayWritable(anagrams);
 				context.write(key, result);
@@ -103,7 +104,8 @@ public class AnagramFinder {
   }
 
   private static boolean inArray(String word, String[] array) {
-    word = word.replaceAll(not_letters, "");
+		word = word.replaceAll(not_letters, "");
+		if(array.length < 1) return false;
     for(String element : array) {
       String word_element = element.replaceAll(not_letters, "");
       if(word_element.equals(word)) return true;

@@ -35,7 +35,6 @@ public class AnagramFinder {
 			String[] words = get_words(value.toString());
 
 			for(String word : words) {
-				System.out.print(word);
 				formated_word.set(new Text(format_word(word)));
 				full_word.set(new Text(word));
 				context.write(formated_word, full_word);
@@ -43,37 +42,22 @@ public class AnagramFinder {
 		}
 	}
 
-	public static class AReducer extends Reducer<Text, TextArrayWritable, Text, TextArrayWritable> {
+	public static class AReducer extends Reducer<Text, Text, Text, Text> {
 		
 		public void reduce(Text key, Iterable<Text> values, Context context)
 		 throws IOException, InterruptedException {
 			String[] anagrams = new String[0];
 
 			for(Text val : values) {
-				if(val == null || inArray(val.toString(), anagrams)) continue;
+				if(inArray(val.toString(), anagrams)) continue;
 				anagrams = push(anagrams, val.toString());
 			}
 			if(anagrams.length > 1) {
-				TextArrayWritable result = new TextArrayWritable(anagrams);
+				Text result = new Text(Arrays.toString(anagrams));
 				context.write(key, result);
 			}
 		}
 	}
-
-	public static class TextArrayWritable extends ArrayWritable {
-		public TextArrayWritable() {
-				super(Text.class);
-		}
-
-		public TextArrayWritable(String[] strings) {
-				super(Text.class);
-				Text[] texts = new Text[strings.length];
-				for (int i = 0; i < strings.length; i++) {
-						texts[i] = new Text(strings[i]);
-				}
-				set(texts);
-		}
-}
 
   private static String[] get_words(String text) {
     text = text.toLowerCase();

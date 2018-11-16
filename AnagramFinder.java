@@ -20,7 +20,7 @@ public class AnagramFinder {
 		job.setMapperClass(AMapper.class);
 		job.setReducerClass(AReducer.class);
 		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(String[].class);
+		job.setOutputValueClass(TextArrayWritable.class);
 		FileInputFormat.addInputPath(job, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
 		System.exit(job.waitForCompletion(true) ? 0 : 1);

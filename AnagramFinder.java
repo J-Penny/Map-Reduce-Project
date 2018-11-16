@@ -54,7 +54,7 @@ public class AnagramFinder {
 			}
 			if(anagrams.length > 1) {
 				Text result = new Text(Arrays.toString(anagrams));
-				context.write(result);
+				context.write(key, result);
 			}
 		}
 	}

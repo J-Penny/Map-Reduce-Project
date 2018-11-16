@@ -42,15 +42,15 @@ public class AnagramFinder {
 		}
 	}
 
-	public static class AReducer extends Reducer<Text, ArrayWritable, Text, ArrayWritable> {
+	public static class AReducer extends Reducer<Text, TextArrayWritable, Text, TextArrayWritable> {
 		private TextArrayWritable result;
 		
 		public void reduce(Text key, Iterable<Text> values, Context context)
 		 throws IOException, InterruptedException {
 			String[] anagrams = new String[0];
 			for(Text val : values) {
-				if(inArray(toString(val), anagrams)) continue;
-				anagrams = push(anagrams, toString(val));
+				if(inArray(val.toString(), anagrams)) continue;
+				anagrams = push(anagrams, val.toString());
 			}
 			if(anagrams.length > 1) {
 				result = new TextArrayWritable(anagrams);
@@ -92,10 +92,10 @@ public class AnagramFinder {
     return new String(word);
   }
 
-  private static String[] push(String[] array, String string_to_push){
+  private static String[] push(String[] array, String element){
     final int n = array.length;
     array = Arrays.copyOf(array, n + 1);
-    array[n] = string_to_push;
+    array[n] = element;
     return array;
   }
 

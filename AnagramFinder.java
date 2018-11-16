@@ -26,7 +26,7 @@ public class AnagramFinder {
 		System.exit(job.waitForCompletion(true) ? 0 : 1);
 	}
 
-	public static class AMapper extends Mapper<Object, Text, Text, String>{
+	public static class AMapper extends Mapper<Object, Text, Text, Text>{
 		private Text formated_word = new Text();
 		private Text full_word = new Text();
 

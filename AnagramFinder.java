@@ -48,8 +48,10 @@ public class AnagramFinder {
 		public void reduce(Text key, Iterable<Text> values, Context context)
 		 throws IOException, InterruptedException {
 			String[] anagrams = new String[0];
-			for(Text val : values) {
-				if(inArray(val.toString(), anagrams)) continue;
+			Iterator<Text> words = values.iterator();
+
+			while(words.hasNext()) {
+				if(inArray(words.next().toString(), anagrams)) continue;
 				anagrams = push(anagrams, val.toString());
 			}
 			if(anagrams.length > 1) {

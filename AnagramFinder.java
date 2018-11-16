@@ -3,6 +3,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.ArrayWritable;
+import org.apache.hadoop.io.Iterator;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -52,7 +53,7 @@ public class AnagramFinder {
 
 			while(words.hasNext()) {
 				if(inArray(words.next().toString(), anagrams)) continue;
-				anagrams = push(anagrams, val.toString());
+				anagrams = push(anagrams, words.next().toString());
 			}
 			if(anagrams.length > 1) {
 				result = new TextArrayWritable(anagrams);

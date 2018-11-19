@@ -35,6 +35,7 @@ public class AnagramFinder {
 			String[] words = get_words(value.toString());
 
 			for(String word : words) {
+				if(word.length() < 2) continue;
 				formated_word.set(new Text(format_word(word)));
 				full_word.set(new Text(word));
 				context.write(formated_word, full_word);

@@ -2,6 +2,7 @@ import java.io.IOException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -46,7 +47,7 @@ public class AnagramFinder {
 	}
 
 	//<KEYIN(formated_word), VALUEIN(full_word), KEYOUT(formated_word), VALUEOUT(anagram array as text)>
-	public static class AReducer extends Reducer<Text, Text, Text, Text> {
+	public static class AReducer extends Reducer<Text, Text, NullWritable, Text> {
 		private Text anagram_text;
 
 		//formated_word -> {full_word, full_word, ...} with possible duplicates
@@ -60,7 +61,8 @@ public class AnagramFinder {
 			}
 			if(anagrams.length > 1) { //if more than 1 value to the key
 				anagram_text = new Text(Arrays.toString(anagrams)); //Convert anagram array to text type
-				context.write(key, anagram_text); //formated_word(key) -> [full_word, full_word, ...]
+				NullWritable null_key = NullWritable.get();
+				context.write(null_key, anagram_text); //[full_word, full_word, ...]
 			}
 		}
 	}

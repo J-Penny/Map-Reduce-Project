@@ -39,7 +39,7 @@ public class AnagramFinder {
 			String[] words = get_words(value.toString()); //Get all the words from the string
 
 			for(String word : words) { //for every word
-				if(word.length() > 2) continue;
+				if(word.length() > 1) continue;
 				formated_word.set(new Text(format_word(word))); //store a formated word
 				full_word.set(new Text(word)); //store the full word
 				context.write(formated_word, full_word); // formated_word(key) -> full_word(value)

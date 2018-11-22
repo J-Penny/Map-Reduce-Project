@@ -14,7 +14,7 @@ public class AnagramFinder {
 
 	//Regex to format words
 	private static String not_letters = "[^a-zA-Z\u00C0-\u017F]";
-  private static String not_word_chars = "(?<= )'|[^a-zA-Z\u00C0-\u017F '-/]";
+  private static String not_word_chars = "(?<= )'|[^a-zA-Z\u00C0-\u017F '-]";
 	
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
@@ -72,7 +72,7 @@ public class AnagramFinder {
   private static String[] get_words(String text) {
     text = text.toLowerCase();
     text = text.replaceAll(not_word_chars,"");
-    String[] words = text.split(" +|--|/");
+    String[] words = text.split(" +|--");
     return words;
   }
 

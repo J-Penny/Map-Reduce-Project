@@ -23,11 +23,14 @@ public class AnagramFinder {
 		job.setMapperClass(AMapper.class);
 		job.setReducerClass(AReducer.class);
 		job.setOutputKeyClass(Text.class); //formated_word
-		job.setOutputValueClass(Text.class); //anagrams array
+		job.setOutputValueClass(Text.class); //full_word
 		FileInputFormat.addInputPath(job, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
 		System.exit(job.waitForCompletion(true) ? 0 : 1);
 	}
+
+	/*Splitting - The text from the 'FileInputPath' is split into many chunks, in order for the 
+	computation to be split amongst multiple data nodes.*/
 
 	//<KEYIN, VALUEIN (input text), KEYOUT(formated_word), VALUEOUT(fullword)>
 	public static class AMapper extends Mapper<Object, Text, Text, Text>{
@@ -47,7 +50,9 @@ public class AnagramFinder {
 		}
 	}
 
-	//<KEYIN(formated_word), VALUEIN(full_word), KEYOUT(formated_word), VALUEOUT(anagram array as text)>
+	/*Shuffling - Each object is grouped based on its key*/
+
+	//<KEYIN(formated_word), VALUEIN(full_word), KEYOUT(null_writeable), VALUEOUT(anagram array as text)>
 	public static class AReducer extends Reducer<Text, Text, NullWritable, Text> {
 		private Text anagram_text;
 
